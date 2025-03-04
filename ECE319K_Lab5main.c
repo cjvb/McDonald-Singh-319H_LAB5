@@ -27,7 +27,7 @@ void Sound_Stop(void);
 // use main1 to determine Lab5 assignment
 void Lab5Grader(int mode);
 void Grader_Init(void);
-int main(void){ // main1
+int main1(void){ // main1
   Clock_Init80MHz(0);
   LaunchPad_Init();
   Lab5Grader(0); // print assignment, no grading
@@ -38,7 +38,7 @@ const uint32_t Inputs[12]={0, 1, 7, 8, 15, 16, 17, 23, 24, 25, 30, 31};
 uint32_t Testdata;
 
 // use main2a to perform static testing of DAC, if you have a voltmeter
-int main2a(void){ // main2a
+int main(void){ // main2a
   Clock_Init80MHz(0);
   LaunchPad_Init();
   Grader_Init();   // execute this line before your code
@@ -52,6 +52,7 @@ int main2a(void){ // main2a
       Testdata = Inputs[i];
       DAC5_Out(Testdata);
       // put a breakpoint on the next line and use meter to measure DACout
+      __asm volatile("bkpt; \n");
       // place data in Table 5.3
       Debug_Dump(Testdata);
     }
@@ -64,7 +65,7 @@ int main2a(void){ // main2a
 // attach PB20 (scope uses PB20 as ADC input) to your DACout
 // TExaSdisplay scope uses TimerG7, ADC0
 // To use the scope, there can be no breakpoints in your code
-int main2b(void){ // main2b
+int main2(void){ // main2b
   Clock_Init80MHz(0);
   LaunchPad_Init();
   Grader_Init();   // execute this line before your code
@@ -83,7 +84,7 @@ int main2b(void){ // main2b
         // place data in Table 5.3
         // touch and release S2 to continue
       while(LaunchPad_InS2()==0){}; // wait for S2 to be touched
-      while(LaunchPad_InS2()!=0){}; // wait for S2 to be released
+      while(LaunchPad_InS2()!=0){continue;}; // wait for S2 to be released
       if((GPIOB->DOUT31_0&0x20) == 0){
          while(1){}; // DOUT not friendly
       }
